@@ -1,0 +1,21 @@
+---
+
+- name: Install needed php extensions
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - php7.3-fpm
+    - php7.3-mysql
+    - php7.3-curl 
+    - php7.3-gd 
+    - php7.3-intl 
+    - php7.3-mbstring 
+    - php7.3-soap 
+    - php7.3-xml 
+    - php7.3-xmlrpc 
+    - php7.3-zip
+- name: Setup php-fpm
+  replace: dest=/etc/php/7.3/fpm/php.ini regexp="(;cgi.fix_pathinfo=1)" replace="cgi.fix_pathinfo=0"
+  notify:
+    - reload nginx

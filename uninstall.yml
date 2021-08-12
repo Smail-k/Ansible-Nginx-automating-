@@ -1,0 +1,33 @@
+---
+- hosts : client_nfs
+  tasks :
+  - name : umount /nginx
+    mount :
+      path: /nginx
+      state: unmounted
+
+
+- hosts : all 
+  tasks : 
+  - name : uninstall nginx
+    command : 
+      cmd : apt-get purge nginx nginx-common
+      warn : no
+      stdin : "y"
+  
+  - name : uninstall php extensions 
+    command : 
+      cmd : apt-get purge 'php*'
+      warn : no
+      stdin : "y"
+  - name : uninstall nfs-server
+    command : 
+      cmd : apt-get --purge remove nfs-kernel-server nfs-common portmap
+      warn : no 
+      stdin : "y"
+
+  - name : delete /nginx directory
+    file :
+      path : "/nginx"
+      state : absent
+

@@ -1,0 +1,14 @@
+# WordPress database settings
+wp_db_name: wordpress
+wp_db_user: userwp
+wp_db_password: smail
+wp_db_host: 185.153.114.123:3306
+  
+auto_up_disable: true
+
+server_hostname: monsite.wp.com
+
+hello_world : helloWorld.site.com
+wordpress_site : monsite.wp.com
+
+nfs_admin : 185.153.114.121

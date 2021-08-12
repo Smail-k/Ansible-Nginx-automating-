@@ -1,0 +1,16 @@
+---
+- name: Create mountable dir
+  file: path=/nginx state=directory mode=777 owner=root group=root
+
+- name: install NFS.
+  apt: name={{ item }} state=present
+  with_items:
+    - nfs-common
+    - nfs-kernel-server
+    - portmap
+- name: update /etc/exports
+  template: src=../templates/exports.j2 dest=/etc/exports owner=root group=root
+  notify : 
+    - restart nfs-server
+
+

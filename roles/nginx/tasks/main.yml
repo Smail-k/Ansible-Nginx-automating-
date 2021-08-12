@@ -1,0 +1,29 @@
+---  
+- name: "apt-get update"
+  apt:
+    update_cache: yes
+   
+- name : install the latest version of nginx
+  apt : name=nginx state=latest
+  
+
+- name : start nginx 
+  service : name=nginx state=started enabled=true  
+- name: Update nginx confs for WordPress + PHP
+  template: "src=../templates/helloworld.conf dest=/etc/nginx/sites-available/{{hello_world}} owner=www-data group=www-data mode=0644"
+  
+
+- name: Enable the site
+  file: src=/etc/nginx/sites-available/{{hello_world}} dest=/etc/nginx/sites-enabled/{{hello_world}} owner=www-data group=www-data state=link
+  notify:
+  - reload nginx
+  
+
+- name: Update nginx confs for wordpress
+  template: "src=../templates/monsite.wp.com.conf dest=/etc/nginx/sites-available/{{wordpress_site}} owner=www-data group=www-data mode=0644"
+
+- name: Enable wordpress site
+  file: src=/etc/nginx/sites-available/{{wordpress_site}} dest=/etc/nginx/sites-enabled/{{wordpress_site}} owner=www-data group=www-data state=link
+  notify:
+  - reload nginx
+...

@@ -1,0 +1,31 @@
+---
+- name: Download wordpress 
+  get_url : 
+    url : https://wordpress.org/wordpress-latest.tar.gz
+    dest : /nginx/wordpress-latest.tar.gz
+   
+
+- name : Extract Wordpress 
+  unarchive : 
+    src : /nginx/wordpress-latest.tar.gz
+    dest : /nginx
+    owner : www-data 
+    group : www-data 
+   
+
+- name: Add wp-config
+  template: "src=wp-config.php dest=/nginx/wordpress/wp-config.php"
+  
+
+- name: Update WordPress config file
+  lineinfile:
+    dest: "/nginx/wordpress/wp-config.php"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - {'regexp': "define\\('DB_NAME', '(.)+'\\);", 'line': "define('DB_NAME', '{{wp_db_name}}');"}
+    - {'regexp': "define\\('DB_USER', '(.)+'\\);", 'line': "define('DB_USER', '{{wp_db_user}}');"}
+    - {'regexp': "define\\('DB_PASSWORD', '(.)+'\\);", 'line': "define('DB_PASSWORD', '{{wp_db_password}}');"}
+    - {'regexp': "define\\('DB_HOST', '(.)+'\\);", 'line': "define( 'DB_HOST', '{{wp_db_host}}');"}
+  notify : 
+    - restart php7.3-fpm

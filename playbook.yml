@@ -1,0 +1,12 @@
+---
+- hosts : group 
+  roles : 
+    - nginx 
+    - php
+- hosts : server_nfs
+  roles : 
+    - nfs-server
+    - wordpress
+- hosts : client_nfs
+  roles : 
+    - nfs-client

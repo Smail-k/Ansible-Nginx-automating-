@@ -1,0 +1,11 @@
+---
+- name: install nfs client.
+  apt:
+    name=nfs-common
+    state=present
+
+- name: Create mountable dir
+  file: path=/nginx state=directory mode=777 owner=root group=root
+
+- name: set mountpoints
+  mount: path=/nginx src={{ nfs_admin  }}:/nginx fstype=nfs state=mounted
